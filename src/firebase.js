@@ -5,10 +5,8 @@ import {
   signOut
 } from "firebase/auth";
 
-import { getFirestore } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 
-// Reemplaza con tus credenciales desde Firebase Console
 const firebaseConfig = {
   apiKey: "AIzaSyBgalMy9iyGnTYKEghmg285a8xWHkPvQ58",
   authDomain: "etniaapp-3d368.firebaseapp.com",
@@ -19,30 +17,27 @@ const firebaseConfig = {
   measurementId: "G-H1TQ0XSPBX"
 };
 
+// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app);
 
-// Google Auth configurado para solicitar permisos de Google Drive API
+// Configurar Proveedor de Google con Scopes para Drive y Sheets
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.addScope('https://www.googleapis.com/auth/drive.file');
+googleProvider.addScope('https://www.googleapis.com/auth/spreadsheets');
 
 export const loginWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential?.accessToken;
-    if (token) {
-      localStorage.setItem('gdrive_access_token', token);
+    if (credential?.accessToken) {
+      localStorage.setItem('gdrive_access_token', credential.accessToken);
     }
     return result.user;
   } catch (error) {
-    console.error("Error en login:", error);
+    console.error("Error en login con Google:", error);
     throw error;
   }
 };
 
-export const logout = () => {
-  localStorage.removeItem('gdrive_access_token');
-  return signOut(auth);
-};
+export const logout = () => signOut(auth);

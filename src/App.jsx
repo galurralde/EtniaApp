@@ -1,13 +1,14 @@
 import { FolderOpen, LogIn, PlusCircle } from 'lucide-react';
-import React, { useState } from 'react';
 import { loginWithGoogle, logout } from './firebase';
 
+import CLPIModule from './components/CLPIModule';
 import EthicalModule from './components/EthicalModule';
 import ExportModule from './components/ExportModule';
 import Header from './components/Header';
 import HouseholdModule from './components/HouseholdModule';
 import NewProjectModal from './components/NewProjectModal';
 import RoleSelector from './components/RoleSelector';
+import { useState } from 'react';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -55,15 +56,22 @@ export default function App() {
       />
 
       {!user ? (
-        <div className="glass-panel p-8 max-w-md mx-auto my-16 rounded-3xl text-center shadow-2xl">
+        <div className="glass-panel p-8 max-w-md mx-auto my-16 rounded-3xl text-center shadow-2xl border border-slate-800/80">
           <h2 className="text-3xl font-bold mb-2 text-white">EtniaApp Salta</h2>
           <p className="text-slate-300 text-sm mb-6">Plataforma Universitaria de Etnografía Digital en Territorio</p>
-          <button 
-            onClick={handleLogin}
-            className="w-full py-3 px-6 bg-salta-earth hover:bg-amber-700 text-white rounded-2xl font-semibold flex items-center justify-center gap-3 transition shadow-lg"
-          >
-            <LogIn className="w-5 h-5" /> Iniciar Sesión con Google
-          </button>
+          
+          {/* Contenedor de botones: 'gap-3.5' controla la distancia entre ellos */}
+          <div className="flex flex-col gap-3.5 w-full">
+            <CLPIModule project={{ title: "Proyecto Etnia" }} />
+
+            <button 
+              onClick={handleLogin}
+              className="w-full py-3 px-6 bg-salta-earth hover:bg-amber-700 text-white rounded-xl font-semibold flex items-center justify-center gap-3 transition shadow-lg text-sm border border-amber-600/30"
+            >
+              <LogIn className="w-5 h-5 shrink-0" /> 
+              <span>Iniciar Sesión con Google</span>
+            </button>
+          </div>
         </div>
       ) : (
         <main>
